@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Car
+  - Path
+  - Parking
+  - BankParkEntrance
+  - ParkingSpace
+  - Buildings
+  - isWalkable
+  - Crossings
+  - Bank
+  - Water
+  - Fishing
+  - FishingSpots
+  - Citizen
+  - TrafficLight
+  - CarSphereCastPos
+  - Road
+  - MidSection
+  - LeftTurningCheck
+  - RightTurningCheck
+  - WithinTrafficLights
+  - RoundaboutRoad
+  - RoundaboutStart
+  - RoundaboutEnter
+  - RoundaboutLeave
+  - Roundabout
+  - RoundaboutTurnOff
+  - RoundaboutLeft
+  - RoundaboutForward
+  - RoundaboutRight
+  - DetectSignal
+  - 2Lane
+  - 180Parking
+  - 90Parking
+  - DespawnPoint
+  - FastSpawnPoint
+  - EnteredRoundabout
+  - RoundAboutSituationSpawn
+  - RoundAboutSituationSpawnSpectate
+  - TrafficLightSituationSpawn
+  - TrafficLightSituationSpawnSpectate
+  - TrafficLightLeftPanel
+  - TrafficLightRightPanel
+  - TrafficLightForwardPanel
+  - TrafficLightRedPanel
+  - TrafficLightGreenPanel
+  - RoundaboutStartPanel
+  - RoundaboutNoCarsAroundPanel
+  - RoundaboutOtherCarGoingLeftPanel
+  - RoundaboutSignalPanel
+  - TrafficLightLight
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - isWalkable
+  - RoundaboutLeft
+  - RoundaboutRight
+  - RoundaboutForward
+  - DetectSignal
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
