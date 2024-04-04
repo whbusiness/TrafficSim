@@ -101,6 +101,7 @@ public class CarController : MonoBehaviour
     private PauseScript isPaused;
     private float timerForRoundaboutRot;
     public bool isInTrafficLightArea = false, isOtherCarSignallingLeftAtRoundabout = false;
+    public int carLayer;
     void Start()
     {
         hasPriority = true;
@@ -129,6 +130,7 @@ public class CarController : MonoBehaviour
         stopTick = false;
         isOtherCarSignallingLeftAtRoundabout = false;
         detectSignalLayer = 1 << 10;
+        carLayer = 1 << 11;
         _rb = GetComponent<Rigidbody>();
         thisCarCollider = GetComponent<Collider>();
         rotSpeedRight = rotSpeed;
@@ -615,7 +617,7 @@ public class CarController : MonoBehaviour
         {
             _rb.AddForce(speed * Time.fixedDeltaTime * transform.forward, ForceMode.Force);
             //print("Moving Forward");
-            if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out RaycastHit hit, maxDist) && !carIsTurning && !moveToSingleLane)
+            if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out RaycastHit hit, maxDist, carLayer, QueryTriggerInteraction.Ignore) && !carIsTurning && !moveToSingleLane)
             {
                 
                 /*if (hit.collider.gameObject.CompareTag("Car") && hit.collider.gameObject != gameObject && hit.collider.gameObject.GetComponent<CarController>().isParking && !hit.collider.gameObject.GetComponent<CarController>().isTrafficLightRed)

@@ -403,7 +403,7 @@ GameObject:
   - component: {fileID: 1922246684977679954}
   - component: {fileID: 8677092018320373158}
   - component: {fileID: 5446814533701809717}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Car_1 (4)
   m_TagString: Car
   m_Icon: {fileID: 0}
@@ -563,6 +563,9 @@ MonoBehaviour:
   inLineOfParkingSpot: {fileID: 0}
   parkingSpaceRot: 0
   closestCarAtRoundabout: {fileID: 0}
+  isInTrafficLightArea: 0
+  isOtherCarSignallingLeftAtRoundabout: 0
+  carLayer: 0
 --- !u!54 &5446814533701809717
 Rigidbody:
   m_ObjectHideFlags: 0
