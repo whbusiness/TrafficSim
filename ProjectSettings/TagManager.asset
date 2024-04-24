@@ -54,6 +54,7 @@ TagManager:
   - RoundaboutOtherCarGoingLeftPanel
   - RoundaboutSignalPanel
   - TrafficLightLight
+  - RemoveDir
   layers:
   - Default
   - TransparentFX

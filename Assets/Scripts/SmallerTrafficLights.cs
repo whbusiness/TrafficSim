@@ -97,6 +97,12 @@ public class SmallerTrafficLights : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Car"))
         {
+            if (other.gameObject.GetComponent<CarController>().isMoreThan1Lane)
+            {
+                other.gameObject.GetComponent<CarController>().isMoreThan1Lane = false;
+            }
+
+
             if (state == Light.RED && other.GetComponent<CarController>().canMove)
             {
                 other.GetComponent<CarController>().canMove = false;

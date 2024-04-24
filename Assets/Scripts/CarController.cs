@@ -639,7 +639,7 @@ public class CarController : MonoBehaviour
                 {
                     _rb.velocity = Vector3.zero;
                 }
-                if(hit.collider.gameObject.CompareTag("Car") && hit.collider.gameObject != gameObject && hit.collider.gameObject.GetComponent<CarController>().isParking == false && hit.collider.gameObject.GetComponent<CarController>().speed == speed && hit.collider.transform.eulerAngles.y == transform.eulerAngles.y)
+                if(hit.collider.gameObject.CompareTag("Car") && hit.collider.gameObject != gameObject && hit.collider.gameObject.GetComponent<CarController>().isParking == false && hit.collider.gameObject.GetComponent<CarController>().speed == speed && Mathf.Round(hit.collider.transform.eulerAngles.y) == Mathf.Round(transform.eulerAngles.y))
                 {
                     _rb.velocity = hit.collider.gameObject.GetComponent<Rigidbody>().velocity;
                 }
@@ -867,6 +867,12 @@ public class CarController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.CompareTag("RemoveDir") && trafficLightsLeft)
+        {
+            getCurrentRot = Mathf.Round(transform.eulerAngles.y);
+            getDir = true;
+            trafficLightsLeft = false;
+        }
         if (other.gameObject.CompareTag("EnteredRoundabout"))
         {
             goAtRoundabout = true;
@@ -883,18 +889,7 @@ public class CarController : MonoBehaviour
         }
         if (other.gameObject.CompareTag("RoundaboutStart"))
         {
-            _rb.velocity = Vector3.zero;
-            if (!alreadyHasSignalDetector)
-            {
-                var col = Physics.OverlapSphere(transform.position, 4, detectSignalLayer, QueryTriggerInteraction.Collide);
-                foreach (var c in col)
-                {
-                    print(c.gameObject.name);
-                    detectSignal = c.gameObject;
-                    alreadyHasSignalDetector = true;
-                }
-
-            }
+            _rb.velocity = Vector3.zero;            
         }
         if (other.gameObject.CompareTag("RoundaboutEnter") && !hasAlreadyJoinedRoundabout)
         {
@@ -1065,6 +1060,20 @@ public class CarController : MonoBehaviour
             else
             {
                 isTrafficLightRed = false;
+            }
+        }
+
+        if (other.gameObject.CompareTag("RoundaboutStart"))
+        {
+            if (!alreadyHasSignalDetector)
+            {
+                var col = Physics.OverlapSphere(transform.position, 4, detectSignalLayer, QueryTriggerInteraction.Collide);
+                foreach (var c in col)
+                {
+                    print(c.gameObject.name);
+                    detectSignal = c.gameObject;
+                    alreadyHasSignalDetector = true;
+                }
             }
         }
 
