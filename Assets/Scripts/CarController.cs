@@ -102,6 +102,9 @@ public class CarController : MonoBehaviour
     private float timerForRoundaboutRot;
     public bool isInTrafficLightArea = false, isOtherCarSignallingLeftAtRoundabout = false;
     public int carLayer;
+    [SerializeField]
+    private GameObject signalObjectL, signalObjectR;
+    private bool signalLeftOn, signalRightOn;
     void Start()
     {
         hasPriority = true;
@@ -110,6 +113,8 @@ public class CarController : MonoBehaviour
         goAround = false;
         carIsTurning = false;
         hasReachedForwardAroundCar = false;
+        signalObjectL.SetActive(false);
+        signalObjectR.SetActive(false);
         hasReachedRightAroundCar = false;
         isAlreadyWithin = false;
         hasTurned = false;
@@ -254,6 +259,23 @@ public class CarController : MonoBehaviour
 
         }
 
+    }
+
+    void SignalLeftOn()
+    {
+        signalObjectL.SetActive(true);
+    }
+    void SignalLeftOff()
+    {
+        signalObjectL.SetActive(false);
+    }
+    void SignalRightOn()
+    {
+        signalObjectR.SetActive(true);
+    }
+    void SignalRightOff()
+    {
+        signalObjectR.SetActive(false);
     }
 
     private void Update()
@@ -688,6 +710,8 @@ public class CarController : MonoBehaviour
     void ChangeToSignalLeft()
     {
         signalLeft = true;
+        InvokeRepeating(nameof(SignalLeftOn), 0f, .2f);
+        InvokeRepeating(nameof(SignalLeftOff), 0f, .3f);
     }
 
     void GoAroundCar()
