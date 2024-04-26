@@ -408,10 +408,17 @@ public class CarController : MonoBehaviour
                 if (roundaboutRight)
                 {
                     signalRight = true;
+                    CancelInvoke();
+                    InvokeRepeating(nameof(SignalRightOn), 0f, .2f);
+                    InvokeRepeating(nameof(SignalRightOff), 0f, .3f);
+
                 }
                 else if (roundaboutLeft)
                 {
                     signalLeft = true;
+                    CancelInvoke();
+                    InvokeRepeating(nameof(SignalLeftOn), 0f, .2f);
+                    InvokeRepeating(nameof(SignalLeftOff), 0f, .3f);
                 }
                 else
                 {
@@ -709,9 +716,11 @@ public class CarController : MonoBehaviour
 
     void ChangeToSignalLeft()
     {
-        signalLeft = true;
+        CancelInvoke();
+        signalObjectR.SetActive(false);
         InvokeRepeating(nameof(SignalLeftOn), 0f, .2f);
         InvokeRepeating(nameof(SignalLeftOff), 0f, .3f);
+        signalLeft = true;
     }
 
     void GoAroundCar()
@@ -937,6 +946,9 @@ public class CarController : MonoBehaviour
                 hasAlreadyJoinedRoundabout = false;
                 signalLeft = false;
                 signalRight = false;
+                CancelInvoke();
+                signalObjectL.SetActive(false);
+                signalObjectR.SetActive(false);
                 alreadyHasSignalDetector = false;
                 isOnRoundabout = false;
             }
