@@ -255,10 +255,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2494416990869700528}
   - component: {fileID: 6391125508082984162}
-  - component: {fileID: 6159212479511812290}
   - component: {fileID: 2935451735531732658}
   - component: {fileID: 827154327489840300}
   - component: {fileID: 4446781916727136192}
+  - component: {fileID: -4517077994514348852}
   m_Layer: 0
   m_Name: casual_Male_K (3)
   m_TagString: Citizen
@@ -305,33 +305,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6159212479511812290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2958867657339604773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a16f11d697033d4e9d3e56e18fd7fe7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 0.1
-  t: 1
-  distToTarget: 0
-  targetPos: {x: 0, y: 0, z: 0}
-  prevPos: {x: 0, y: 0, z: 0}
-  dir: {x: 0, y: 0, z: 0}
-  posToMoveTo: {x: 0, y: 0, z: 0}
-  crossings: []
-  nextCrossingPoint: {fileID: 0}
-  buildingToMoveTo: {fileID: 0}
-  alphaTransparency: 0.2
-  mesh: {fileID: 0}
-  Locations: []
-  spotsToFish: []
-  checkForCarsRadius: 7
 --- !u!54 &2935451735531732658
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -402,6 +375,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1.5540149, z: 1}
   m_Center: {x: 0, y: 0.27700746, z: 0}
+--- !u!114 &-4517077994514348852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2958867657339604773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d2dcfa37d44b74f82cef45b4334af7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3023709963024585420
 GameObject:
   m_ObjectHideFlags: 0

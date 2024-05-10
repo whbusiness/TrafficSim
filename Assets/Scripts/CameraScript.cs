@@ -8,7 +8,8 @@ public enum Situations
 {
     ROUNDABOUT,
     TRAFFICLIGHTS,
-    FREEROAM
+    FREEROAM,
+    CROSSING
 }
 
 
@@ -23,23 +24,28 @@ public class CameraScript : MonoBehaviour
     private float xClamp, lookingY, lookingX;
     [SerializeField]
     private Transform carToAttachTo;
-    private Situations situation;
+    public  Situations situation;
     private CheckIfEmpty[] emptyLocations;
     private SpawnCars spawners;
     private SpawnCars spawnCars;
     private GameObject[] parking;
     [SerializeField]
-    private InputAction roundaboutScenario, trafficLightScenario, freeRoamScenario, randomCarSpectate, continueScenario;
-    private float roundaboutFloat, trafficLightFloat, freeRoamFloat, randomCarFloat, continueScenarioFloat;
+    private InputAction roundaboutScenario, trafficLightScenario, freeRoamScenario, randomCarSpectate, continueScenario, crossingScenario;
+    private float roundaboutFloat, trafficLightFloat, freeRoamFloat, randomCarFloat, continueScenarioFloat, crossingFloat;
     private GameObject[] roundaboutSpawnPoints, trafficLightSpawnPoints;
+    private GameObject crossingSpawnPoint, humanSpawnPoint;
     private GameObject roundaboutSpectatePoint, trafficLightSpectatePoint, trafficLightInScenario;
     [SerializeField]
     private GameObject carPref;
     private GameObject specCar;
     bool alreadyShown = false, alreadyShownRed = false, alreadyShownGreen = false, alreadyShownRoundaboutStart = false, alreadyShownCarGoingLeftAtRoundabout, alreadyShownRoundaboutSignalPanel;
+    public bool alreadyShownCrossingPanel;
     private GameObject isCloseToTrafficLights;
     private GameObject trafficLightLeftPanel, trafficLightRightPanel, trafficLightForwardPanel, trafficLightGreenPanel, trafficLightRedPanel;
     private GameObject RoundaboutStartPanel, roundaboutOtherCarGoingLeftPanel, roundaboutSignalPanel;
+    private GameObject crossingPanel;
+    [SerializeField]
+    private GameObject humanPref;
     // Start is called before the first frame update
 
 
@@ -58,6 +64,8 @@ public class CameraScript : MonoBehaviour
         freeRoamScenario.canceled += ctx => freeRoamFloat = 0;
         randomCarSpectate.performed += ctx => randomCarFloat = 1;
         randomCarSpectate.canceled += ctx => randomCarFloat = 0;
+        crossingScenario.performed += ctx => crossingFloat = 1;
+        crossingScenario.canceled += ctx => crossingFloat = 0;
         continueScenario.performed += ctx => continueScenarioFloat = 1;
         continueScenario.canceled += ctx => continueScenarioFloat = 0;
 
@@ -82,9 +90,12 @@ public class CameraScript : MonoBehaviour
         trafficLightInScenario = GameObject.Find("TrafficLightInScenario");
         trafficLightGreenPanel = GameObject.FindGameObjectWithTag("TrafficLightGreenPanel");
         trafficLightRedPanel = GameObject.FindGameObjectWithTag("TrafficLightRedPanel");
+        crossingSpawnPoint = GameObject.FindGameObjectWithTag("CrossingSpawnPoint");
+        humanSpawnPoint = GameObject.FindGameObjectWithTag("HumanSpawnPoint");
         RoundaboutStartPanel = GameObject.FindGameObjectWithTag("RoundaboutStartPanel");
         roundaboutOtherCarGoingLeftPanel = GameObject.FindGameObjectWithTag("RoundaboutOtherCarGoingLeftPanel");
         roundaboutSignalPanel = GameObject.FindGameObjectWithTag("RoundaboutSignalPanel");
+        crossingPanel = GameObject.FindGameObjectWithTag("CrossingPanel");
 
         RemovePreviousPanels();
         RemovePrevValues();
@@ -100,6 +111,7 @@ public class CameraScript : MonoBehaviour
         freeRoamScenario.Enable();
         randomCarSpectate.Enable();
         continueScenario.Enable();
+        crossingScenario.Enable();
     }
     private void OnDisable()
     {
@@ -110,6 +122,7 @@ public class CameraScript : MonoBehaviour
         freeRoamScenario.Disable();
         randomCarSpectate.Disable();
         continueScenario.Disable();
+        crossingScenario.Disable();
     }
     private void LateUpdate()
     {
@@ -157,6 +170,14 @@ public class CameraScript : MonoBehaviour
             {
                 carToAttachTo = spawnCars.Cars[randInt].transform;
             }
+        }
+        if(crossingFloat != 0)
+        {
+            ClearCars();
+            RemovePreviousPanels();
+            RemovePrevValues();
+            CrossingSituation();
+            situation = Situations.CROSSING;
         }
 
 
@@ -219,6 +240,19 @@ public class CameraScript : MonoBehaviour
                     RemovePreviousPanels();
                     Time.timeScale = 1;
                     alreadyShownGreen = true;
+                }
+            }
+        }
+
+        if(situation == Situations.CROSSING)
+        {
+            if (crossingPanel.activeInHierarchy)
+            {
+                if (Time.timeScale == 0 && continueScenarioFloat != 0)
+                {
+                    RemovePreviousPanels();
+                    Time.timeScale = 1;
+                    alreadyShownCrossingPanel = true;
                 }
             }
         }
@@ -309,6 +343,7 @@ public class CameraScript : MonoBehaviour
         alreadyShownRoundaboutStart = false;
         alreadyShownCarGoingLeftAtRoundabout = false;
         alreadyShownRoundaboutSignalPanel = false;
+        alreadyShownCrossingPanel = false;
     }
 
     void ClearCars()
@@ -332,9 +367,12 @@ public class CameraScript : MonoBehaviour
         spawnCars.Cars.Clear();
     }
 
-    void FreeRoam()
+    public void FreeRoam()
     {
-        foreach(var item in parking)
+        situation = Situations.FREEROAM;
+        RemovePrevValues();
+        RemovePreviousPanels();
+        foreach (var item in parking)
         {
             if(!item.activeInHierarchy)
             {
@@ -342,6 +380,22 @@ public class CameraScript : MonoBehaviour
             }
         }
         spawners.canSpawn = true;
+    }
+
+    void CrossingSituation()
+    {
+        foreach (var item in parking)
+        {
+            item.SetActive(false);
+        }
+        GameObject go = Instantiate(carPref, new Vector3(crossingSpawnPoint.transform.position.x, 0.09000345f, crossingSpawnPoint.transform.position.z), crossingSpawnPoint.transform.rotation);
+        go.name = "car";
+        spawnCars.Cars.Add(go);
+        GameObject go2 = Instantiate(humanPref, humanSpawnPoint.transform.position, humanSpawnPoint.transform.rotation);
+        go2.name = "Human";
+        spawnCars.Cars.Add(go2);
+        specCar = go;
+        carToAttachTo = go.transform;
     }
 
     void RemovePreviousPanels()
@@ -358,6 +412,7 @@ public class CameraScript : MonoBehaviour
         RoundaboutStartPanel.SetActive(false);
         roundaboutOtherCarGoingLeftPanel.SetActive(false);
         roundaboutSignalPanel.SetActive(false);
+        crossingPanel.SetActive(false);
     }
 
     void RoundAboutSituation()
@@ -400,18 +455,21 @@ public class CameraScript : MonoBehaviour
     {
         Time.timeScale = 0;
         trafficLightLeftPanel.SetActive(true);
+        Invoke(nameof(FreeRoam), 2f);
     }
 
     void DisplayTrafficLightsForwardInfo()
     {
         Time.timeScale = 0;
         trafficLightForwardPanel.SetActive(true);
+        Invoke(nameof(FreeRoam), 2f);
     }
 
     void DisplayTrafficLightsRightInfo()
     {
         Time.timeScale = 0;
         trafficLightRightPanel.SetActive(true);
+        Invoke(nameof(FreeRoam), 2f);
     }
 
     void DisplayTrafficLightGreenPanel()
@@ -432,6 +490,12 @@ public class CameraScript : MonoBehaviour
         RoundaboutStartPanel.SetActive(true);
     }
 
+    public void DisplayCrossingPanel()
+    {
+        Time.timeScale = 0;
+        crossingPanel.SetActive(true);
+    }
+
     void DisplayRoundaboutOtherCarGoingLeft()
     {
         Time.timeScale = 0;
@@ -441,5 +505,6 @@ public class CameraScript : MonoBehaviour
     {
         Time.timeScale = 0;
         roundaboutSignalPanel.SetActive(true);
+        Invoke(nameof(FreeRoam), 2f);
     }
 }

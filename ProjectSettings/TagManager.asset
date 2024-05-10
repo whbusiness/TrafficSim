@@ -55,6 +55,11 @@ TagManager:
   - RoundaboutSignalPanel
   - TrafficLightLight
   - RemoveDir
+  - HumanSpawnPoint
+  - CrossingSpawnPoint
+  - CrossingPanel
+  - CrossingInScenario
+  - WalkingDest
   layers:
   - Default
   - TransparentFX

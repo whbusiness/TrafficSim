@@ -105,6 +105,8 @@ public class CarController : MonoBehaviour
     [SerializeField]
     private GameObject signalObjectL, signalObjectR;
     private bool signalLeftOn, signalRightOn;
+    private GameObject humanInScenario;
+    CameraScript _cam;
     void Start()
     {
         hasPriority = true;
@@ -443,6 +445,10 @@ public class CarController : MonoBehaviour
             }
 
             if (isTrafficLightRed || !hasPriority || !goAtRoundabout)
+            {
+                _rb.velocity = Vector3.zero;
+            }
+            if(humanInScenario != null)
             {
                 _rb.velocity = Vector3.zero;
             }
@@ -900,6 +906,19 @@ public class CarController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.CompareTag("CrossingInScenario"))
+        {
+            _cam = FindObjectOfType<CameraScript>();
+            if (_cam.situation == Situations.CROSSING)
+            {
+                humanInScenario = GameObject.FindGameObjectWithTag("Citizen");
+                humanInScenario.GetComponent<HumanCrossing>().OnCarStopped();
+                if (!_cam.alreadyShownCrossingPanel)
+                {
+                    _cam.DisplayCrossingPanel();
+                }
+            }
+        }
         if (other.gameObject.CompareTag("RemoveDir") && trafficLightsLeft)
         {
             getCurrentRot = Mathf.Round(transform.eulerAngles.y);
