@@ -46,6 +46,7 @@ public class CameraScript : MonoBehaviour
     private GameObject crossingPanel;
     [SerializeField]
     private GameObject humanPref;
+    private ButtonsScript btnScript;
     // Start is called before the first frame update
 
 
@@ -79,6 +80,7 @@ public class CameraScript : MonoBehaviour
         emptyLocations = FindObjectsOfType<CheckIfEmpty>();
         spawners = FindObjectOfType<SpawnCars>();
         parking = GameObject.FindGameObjectsWithTag("Parking");
+        btnScript = FindObjectOfType<ButtonsScript>();
         isCloseToTrafficLights = GameObject.FindGameObjectWithTag("TrafficLightLight");
         roundaboutSpawnPoints = GameObject.FindGameObjectsWithTag("RoundAboutSituationSpawn");
         trafficLightSpawnPoints = GameObject.FindGameObjectsWithTag("TrafficLightSituationSpawn");
@@ -372,6 +374,8 @@ public class CameraScript : MonoBehaviour
         situation = Situations.FREEROAM;
         RemovePrevValues();
         RemovePreviousPanels();
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         foreach (var item in parking)
         {
             if(!item.activeInHierarchy)
@@ -403,6 +407,24 @@ public class CameraScript : MonoBehaviour
         if(Time.timeScale != 1)
         {
             Time.timeScale = 1;
+        }
+        if (crossingPanel.activeInHierarchy)
+        {
+            btnScript.BeforeContinuingAfterCrossing();
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        if (RoundaboutStartPanel.activeInHierarchy)
+        {
+            btnScript.BeforeContinuingAfterRoundabout();
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        if (trafficLightGreenPanel.activeInHierarchy)
+        {
+            btnScript.BeforeContinuingAfterTrafficLight();
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
         trafficLightLeftPanel.SetActive(false);
         trafficLightRightPanel.SetActive(false);
@@ -475,6 +497,8 @@ public class CameraScript : MonoBehaviour
     void DisplayTrafficLightGreenPanel()
     {
         Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         trafficLightGreenPanel.SetActive(true);
     }
 
@@ -487,12 +511,16 @@ public class CameraScript : MonoBehaviour
     void DisplayRoundaboutStartPanel()
     {
         Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         RoundaboutStartPanel.SetActive(true);
     }
 
     public void DisplayCrossingPanel()
     {
         Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         crossingPanel.SetActive(true);
     }
 
